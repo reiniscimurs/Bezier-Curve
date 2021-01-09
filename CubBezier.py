@@ -9,9 +9,9 @@ class Point(object):
         self.x = x
         self.y = y
 
-    def random(self):
-        self.x = random.uniform(0,1)
-        self.y = random.uniform(0,1)
+    def random(self, min= 0, max= 1):
+        self.x = random.uniform(min,max)
+        self.y = random.uniform(min,max)
 
 class CubicBezier(object):
     def __init__(self, p1x= 0, p1y= 0, p2x= 0, p2y= 0, p3x= 0, p3y= 0, p4x= 0, p4y= 0):
@@ -21,13 +21,15 @@ class CubicBezier(object):
         self.p4 = Point(p4x, p4y)
         self.obstacles = []
 
-    def random(self):
-        self.p1.random()
-        self.p2.random()
-        self.p3.random()
-        self.p4.random()
+    def random(self,min= 0, max= 1):
+        'Create a random Bezier curve within [min, max] limits. Default [0,1].'
+        self.p1.random(min, max)
+        self.p2.random(min, max)
+        self.p3.random(min, max)
+        self.p4.random(min, max)
 
     def max_k(self, granuality=100):
+        'Calculate maximal curvature of the Bezier curve.'
         k = 0
         for t in range(0, granuality):
             t = t / granuality
@@ -41,6 +43,7 @@ class CubicBezier(object):
         return k
 
     def calc_curve(self, granuality=100):
+        'Calculate the Bezier curve with the given granuality.'
         B_x = []
         B_y = []
         for t in range(0, granuality):
@@ -54,6 +57,7 @@ class CubicBezier(object):
         return [B_x, B_y]
 
     def plot(self, granuality=100):
+        'Plot the Bezier curve.'
         B = self.calc_curve(granuality)
         plt.plot(B[0], B[1])
         plt.scatter([self.p1.x,self.p2.x,self.p3.x,self.p4.x], [self.p1.y,self.p2.y,self.p3.y,self.p4.y])
@@ -64,6 +68,7 @@ class CubicBezier(object):
 
 
     def arc_len(self, granuality=1000):
+        'Calculate the arc-length of the Bezier curve.'
         B = self.calc_curve(granuality=granuality)
         a_l = 0
 
@@ -73,6 +78,7 @@ class CubicBezier(object):
         return a_l
 
     def optimize_k(self, granuality= 100, obs= True):
+        'Optimize the Bezier curve to minimize the curvature. By setting obs=False, ignore the obstacles.'
         x0 = [0.0, 0.0, 0.0, 0.0]
         res = minimize(self.optimizer_k, x0, args= (granuality, obs, 1), method='Nelder-Mead', tol=1e-7)
         self.p2.x = self.p2.x + res.x[0]
@@ -81,6 +87,7 @@ class CubicBezier(object):
         self.p3.y = self.p3.y + res.x[3]
 
     def optimizer_k(self,x, *args):
+        'Curvature optimizer function.'
         granuality = args[0]
         obs = args[1]
         k_multiplier = args[2]
@@ -103,6 +110,7 @@ class CubicBezier(object):
         return (o.max_k(granuality) + penalty)*k_multiplier
 
     def optimize_l(self, granuality= 100, obs= True):
+        'Optimize the Bezier curve to minimize the arc-length. By setting obs=False, ignore the obstacles.'
         x0 = [0.0, 0.0, 0.0, 0.0]
         res = minimize(self.optimizer_l, x0, args=(granuality, obs, 1), method='Nelder-Mead', tol=1e-7)
         self.p2.x = self.p2.x + res.x[0]
@@ -112,6 +120,7 @@ class CubicBezier(object):
 
 
     def optimizer_l(self,x, *args):
+        'Arc-length optimizer function.'
         granuality = args[0]
         obs = args[1]
         l_multiplier = args[2]
@@ -134,8 +143,12 @@ class CubicBezier(object):
 
         return (o.arc_len(granuality) + penalty)*l_multiplier
 
-    # TODO
     def optimize(self, granuality=100, obs=True, l_multiplier=0.5, k_multiplier=0.5):
+        """
+        Optimize the Bezier curve to simultaniously minimize the arc-lenght and the curvature.
+        Setting obs=False ignores the obstacles. l_multiplier and k_multiplier multiplies
+        the outputs of their respective optimizer functions.
+        """
         x0 = [0.0, 0.0, 0.0, 0.0]
         res = minimize(self.optimizer, x0, args=(granuality, obs, l_multiplier, k_multiplier), method='Nelder-Mead', tol=1e-7)
         self.p2.x = self.p2.x + res.x[0]
@@ -144,6 +157,7 @@ class CubicBezier(object):
         self.p3.y = self.p3.y + res.x[3]
 
     def optimizer(self,x,*args):
+        'Optimizer function of the arc-length and curvature simultanious optimization.'
         granuality = args[0]
         obs = args[1]
         l_multiplier = args[2]
@@ -152,10 +166,15 @@ class CubicBezier(object):
         return self.optimizer_l(x, granuality, obs, l_multiplier) + self.optimizer_k(x, granuality, obs, k_multiplier)
 
     def add_obstacle(self, x=0, y=0, radius=0):
+        'Add an obstacle to the Bezier curve.'
         self.obstacles.append([Point(x,y), radius])
 
     def add_random_obstacle(self, max_x= 1, min_x= 0, max_y=1, min_y=0, max_radius=0.3, min_radius = 0.0):
+        """Add a random obstacle to the Bezier curve. The obstacle will not cover the p1 and p4 points
+        of the Bezier curve.
+        """
         radius = random.uniform(min_radius,max_radius)
+
         d = 0
         x = 0
         y = 0
@@ -169,5 +188,6 @@ class CubicBezier(object):
         self.obstacles.append([Point(x, y), radius])
 
     def clear(self):
+        'Re-initialize the curve.'
         self.__init__()
 
