@@ -169,7 +169,7 @@ class CubicBezier(object):
         'Add an obstacle to the Bezier curve.'
         self.obstacles.append([Point(x,y), radius])
 
-    def add_random_obstacle(self, max_x= 1, min_x= 0, max_y=1, min_y=0, max_radius=0.3, min_radius = 0.0):
+    def add_random_obstacle(self, min_x= 1, max_x= 0, min_y=1, max_y=0, min_radius=0.3, max_radius = 0.0):
         """Add a random obstacle to the Bezier curve. The obstacle will not cover the p1 and p4 points
         of the Bezier curve.
         """
