@@ -1,7 +1,7 @@
-from CubBezier import CubicBezier
+from Bezier import CubicBezier, QuadBezier
 
 print("Creating a Bezier curve object")
-curve = CubicBezier(p1x=-1, p1y=0, p2x=-0.5, p2y=0.5, p3x=0.5, p3y=-0.5, p4x=1, p4y=0)
+curve = CubicBezier(p0x=-1, p0y=0, p1x=-0.5, p1y=0.5, p2x=0.5, p2y=-0.5, p3x=1, p3y=0)
 curve.plot()
 
 print("Adding an obstacle")
@@ -33,8 +33,24 @@ curve.plot()
 
 print("Adding random obstacles")
 for i in range(0,3):
-    curve.add_random_obstacle(min_x=min(curve.p1.x,curve.p4.x), max_x=max(curve.p1.x,curve.p4.x),
-                              min_y=min(curve.p1.y,curve.p4.y), max_y=max(curve.p1.y,curve.p4.y),
+    curve.add_random_obstacle(min_x=min(curve.p0.x,curve.p3.x), max_x=max(curve.p0.x,curve.p3.x),
+                              min_y=min(curve.p0.y,curve.p3.y), max_y=max(curve.p0.y,curve.p3.y),
+                              min_radius=0.05, max_radius=0.5)
+curve.plot()
+
+print("Simultaniously optimizing arc-length and curvature")
+curve.optimize()
+curve.plot()
+
+print("Creating a random quadratic Bezier curve")
+curve = QuadBezier()
+curve.random(min=-1,max=1)
+curve.plot()
+
+print("Adding random obstacles")
+for i in range(0,3):
+    curve.add_random_obstacle(min_x=min(curve.p0.x,curve.p2.x), max_x=max(curve.p0.x,curve.p2.x),
+                              min_y=min(curve.p0.y,curve.p2.y), max_y=max(curve.p0.y,curve.p2.y),
                               min_radius=0.05, max_radius=0.5)
 curve.plot()
 
