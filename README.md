@@ -1,6 +1,6 @@
 # Quadratic and Cubic Bezier curve
 
-Python class for creating quadratic and cubic Bezier curves. Class functions include:
+Python class for creating and optimizing quadratic and cubic Bezier curves. Class functions include:
 
 * CubicBezier()/QuadBezier() - creating a Bezier curve
 * random() - randomizing Bezier curve control points
