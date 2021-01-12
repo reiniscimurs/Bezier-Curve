@@ -14,3 +14,8 @@ Python class for creating quadratic and cubic Bezier curves. Class functions inc
     * optimize_k() - minimize maximum curvature of the curve
     * optomize_l() - minimize arc_length of the curve
     * optimize() - simultaniously optimize curvature and the arc-length of the curve
+    
+    
+    <p align="center">
+    <img width=40% src="https://github.com/reiniscimurs/Bezier-Curve/blob/main/Bezier.PNG">
+</p>
