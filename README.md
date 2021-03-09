@@ -28,5 +28,5 @@ It is a partial python implementation of paper:
 "Bezier curve-based smoothing for path planner with curvature constraint"
 
 <p align="left">
-<img width=60% src="https://github.com/reiniscimurs/Bezier-Curve/blob/main/smooth_path.PNG">
+<img width=60% src="https://github.com/reiniscimurs/Bezier-Curve/blob/main/smooth_path.png">
 </p>
