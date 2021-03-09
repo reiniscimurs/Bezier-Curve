@@ -24,12 +24,9 @@ Python class for creating and optimizing quadratic and cubic Bezier curves. Clas
 
 The path_smoothing.py contains a curvature constrained path smoothing algorithm. A path is obtained between random obstacles in the environment. Initial path is optimized by employing an optimization function. Afterwards, Bezier curve is obtained between the path points and optimized to minimize the path length while maintaining the maximum curvature. (Currently in development and does not guarantee collision free path).
 
-It is a partial python implementation of:
-@inproceedings{cimurs2017bezier,
-  title={Bezier curve-based smoothing for path planner with curvature constraint},
-  author={Cimurs, Reinis and Hwang, Jaepyung and Suh, Il Hong},
-  booktitle={2017 First IEEE International Conference on Robotic Computing (IRC)},
-  pages={241--248},
-  year={2017},
-  organization={IEEE}
-}
+It is a partial python implementation of paper:
+"Bezier curve-based smoothing for path planner with curvature constraint"
+
+<p align="left">
+<img width=60% src="https://github.com/reiniscimurs/Bezier-Curve/blob/main/smooth_path.PNG">
+</p>
